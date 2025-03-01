@@ -3,10 +3,13 @@ import {setAuthToken} from "../utilites/apiClient.ts";
 import {isSsr} from "../utilites/helpers.ts";
 import {getConfig} from "../utilites/config.ts";
 
-const BASE_URL = isSsr()
-    ? getConfig('VITE_API_URL_SERVER')
-    : getConfig('VITE_API_URL_CLIENT');
-const LOGIN_PATH = "/auth/login";
+// const BASE_URL = isSsr()
+//     ? getConfig('VITE_API_URL_SERVER')
+//     : getConfig('VITE_API_URL_CLIENT');
+// const LOGIN_PATH = "/auth/login";
+const BASE_URL = import.meta.env.VITE_API_URL_CLIENT || 'http://localhost:8000';
+const API_BASE = `${BASE_URL}`;
+const LOGIN_PATH = `${BASE_URL}/auth/login`;
 const PREVIOUS_URL_KEY = 'previous_url';
 
 // todo - This isn't scalable, we need to better way to manage this

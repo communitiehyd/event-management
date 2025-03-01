@@ -36,6 +36,7 @@ use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListAttendeesPublicActio
 use HiEvents\Http\Actions\CheckInLists\Public\GetCheckInListPublicAction;
 use HiEvents\Http\Actions\CheckInLists\UpdateCheckInListAction;
 use HiEvents\Http\Actions\Common\Webhooks\StripeIncomingWebhookAction;
+use HiEvents\Http\Actions\Common\Webhooks\RazorpayIncomingWebhookAction;
 use HiEvents\Http\Actions\Events\CreateEventAction;
 use HiEvents\Http\Actions\Events\DuplicateEventAction;
 use HiEvents\Http\Actions\Events\GetEventAction;
@@ -63,6 +64,8 @@ use HiEvents\Http\Actions\Orders\GetOrdersAction;
 use HiEvents\Http\Actions\Orders\MessageOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\RefundOrderAction;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\CreatePaymentIntentActionPublic;
+use HiEvents\Http\Actions\Orders\Payment\Razorpay\CreateRazorpayOrderActionPublic;
+use HiEvents\Http\Actions\Orders\Payment\Razorpay\VerifyRazorpayPaymentActionPublic;
 use HiEvents\Http\Actions\Orders\Payment\Stripe\GetPaymentIntentActionPublic;
 use HiEvents\Http\Actions\Orders\ResendOrderConfirmationAction;
 use HiEvents\Http\Actions\Organizers\CreateOrganizerAction;
@@ -258,6 +261,12 @@ $router->prefix('/public')->group(
         // Promo codes
         $router->get('/events/{event_id}/promo-codes/{promo_code}', GetPromoCodePublic::class);
 
+          // Razorpay payment gateway
+          $router->post('/events/{event_id}/order/{order_short_id}/razorpay/order', 
+          CreateRazorpayOrderActionPublic::class);
+      $router->post('/events/{event_id}/order/{order_short_id}/razorpay/verify', 
+          VerifyRazorpayPaymentActionPublic::class);
+
         // Stripe payment gateway
         $router->post('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', CreatePaymentIntentActionPublic::class);
         $router->get('/events/{event_id}/order/{order_short_id}/stripe/payment_intent', GetPaymentIntentActionPublic::class);
@@ -267,6 +276,9 @@ $router->prefix('/public')->group(
 
         // Webhooks
         $router->post('/webhooks/stripe', StripeIncomingWebhookAction::class);
+
+        // Razorpay webhook
+        $router->post('/webhooks/razorpay', RazorpayIncomingWebhookAction::class);
 
         // Check-In
         $router->get('/check-in-lists/{check_in_list_short_id}', GetCheckInListPublicAction::class);

@@ -99,6 +99,13 @@ const SelectTickets = (props: SelectTicketsProps) => {
 
         onSuccess: (data) => queryClient.invalidateQueries()
             .then(() => {
+                 // Use the stored session ID
+        const sessionId = localStorage.getItem('current_order_session');
+        // Now store it with the order ID
+        if(sessionId)
+        localStorage.setItem(`order_session_${data.data.short_id}`, sessionId);
+        // Clean up the temporary storage
+        localStorage.removeItem('current_order_session');
                 const url = '/checkout/' + eventId + '/' + data.data.short_id + '/details';
                 if (props.widgetMode === 'embedded') {
                     window.open(url, '_blank');
@@ -220,9 +227,13 @@ const SelectTickets = (props: SelectTicketsProps) => {
 
     const handleTicketSelection = (values: Omit<TicketFormPayload, "session_identifier">) => {
         if (values && selectedTicketQuantitySum > 0) {
+            let sessionId =  getSessionIdentifier()
+             // Store it immediately when created
+        localStorage.setItem('current_order_session', sessionId);
+           // localStorage.setItem(`order_session_${data.data.short_id}`, sessionId);
             ticketMutation.mutate({
                 ...values,
-                session_identifier: getSessionIdentifier()
+                session_identifier: sessionId
             });
         } else {
             showInfo(t`Please select at least one ticket`);

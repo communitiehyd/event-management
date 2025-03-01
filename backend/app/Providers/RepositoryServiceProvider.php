@@ -26,6 +26,7 @@ use HiEvents\Repository\Eloquent\QuestionAnswerRepository;
 use HiEvents\Repository\Eloquent\QuestionRepository;
 use HiEvents\Repository\Eloquent\StripeCustomerRepository;
 use HiEvents\Repository\Eloquent\StripePaymentsRepository;
+use HiEvents\Repository\Eloquent\RazorpayPaymentsRepository;
 use HiEvents\Repository\Eloquent\TaxAndFeeRepository;
 use HiEvents\Repository\Eloquent\TicketPriceRepository;
 use HiEvents\Repository\Eloquent\TicketRepository;
@@ -52,6 +53,7 @@ use HiEvents\Repository\Interfaces\QuestionAnswerRepositoryInterface;
 use HiEvents\Repository\Interfaces\QuestionRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripeCustomerRepositoryInterface;
 use HiEvents\Repository\Interfaces\StripePaymentsRepositoryInterface;
+use HiEvents\Repository\Interfaces\RazorpayPaymentsRepositoryInterface;
 use HiEvents\Repository\Interfaces\TaxAndFeeRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketPriceRepositoryInterface;
 use HiEvents\Repository\Interfaces\TicketRepositoryInterface;
@@ -74,6 +76,7 @@ class RepositoryServiceProvider extends ServiceProvider
         QuestionRepositoryInterface::class => QuestionRepository::class,
         QuestionAnswerRepositoryInterface::class => QuestionAnswerRepository::class,
         StripePaymentsRepositoryInterface::class => StripePaymentsRepository::class,
+        RazorpayPaymentsRepositoryInterface::class => RazorpayPaymentsRepository:: class,
         PromoCodeRepositoryInterface::class => PromoCodeRepository::class,
         MessageRepositoryInterface::class => MessageRepository::class,
         PasswordResetTokenRepositoryInterface::class => PasswordResetTokenRepository::class,

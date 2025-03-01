@@ -14,25 +14,28 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
     const [isReturningFromStripe, setIsReturningFromStripe] = useState(false);
 
     useEffect(() => {
-        if (typeof window === 'undefined') {
-            return;
-        }
-        setIsReturningFromStripe(
-            window.location.search.includes('is_return') || window.location.search.includes('is_refresh')
-        );
+        // if (typeof window === 'undefined') {
+        //     return;
+        // }
+        // setIsReturningFromStripe(
+        //     window.location.search.includes('is_return') || window.location.search.includes('is_refresh')
+        // );
     }, []);
 
     return (
         <div className={paymentClasses.stripeInfo}>
-            {props.stripeDetails?.is_connect_setup_complete && (
+            {/* {props.stripeDetails?.is_connect_setup_complete && (
                 <>
                     <h2>{t`You have connected your Stripe account`}</h2>
                     <p>
                         {t`You can now start receiving payments through Stripe.`}
                     </p>
                 </>
-            )}
-            {!props.stripeDetails?.is_connect_setup_complete && (
+            )} */}
+            { 
+            // !props.stripeDetails?.is_connect_setup_complete
+             // &&
+               (
                 <>
                     <h2>
                         {!isReturningFromStripe && t`You have not connected your Stripe account`}
@@ -66,23 +69,28 @@ const ConnectStatus = (props: { stripeDetails: StripeConnectDetails }) => {
 const PaymentSettings = () => {
     const accountQuery = useGetAccount();
     const stripeDetailsQuery = useCreateOrGetStripeConnectDetails(accountQuery.data?.id);
-    const stripeDetails = stripeDetailsQuery.data;
+    const stripeDetails =   {   account: "",
+        stripe_account_id: "",
+        is_connect_setup_complete: false,
+        connect_url: ""};
+    //stripeDetailsQuery.data;
     const error = stripeDetailsQuery.error as any;
 
-    if (error?.response?.status === 403) {
-        return (
-            <>
-                <Card className={classes.tabContent}>
-                    <div className={paymentClasses.stripeInfo}>
-                        <h2>{t`You do not have permission to access this page`}</h2>
-                        <p>
-                            {error?.response?.data?.message}
-                        </p>
-                    </div>
-                </Card>
-            </>
-        );
-    }
+
+    // if (error?.response?.status === 403) {
+    //     return (
+    //         <>
+    //             <Card className={classes.tabContent}>
+    //                 <div className={paymentClasses.stripeInfo}>
+    //                     <h2>{t`You do not have permission to access this page`}</h2>
+    //                     <p>
+    //                         {error?.response?.data?.message}
+    //                     </p>
+    //                 </div>
+    //             </Card>
+    //         </>
+    //     );
+    // }
 
     return (
         <>
@@ -92,7 +100,10 @@ const PaymentSettings = () => {
             />
             <Card className={classes.tabContent}>
                 <LoadingMask/>
-                {stripeDetails && <ConnectStatus stripeDetails={stripeDetails}/>}
+                {
+                //stripeDetails &&
+                 <ConnectStatus stripeDetails={stripeDetails}/>
+                 }
             </Card>
         </>
     );

@@ -36,4 +36,9 @@ return [
         'public_key' => env('STRIPE_PUBLIC_KEY'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
+    
+    'razorpay' => [
+        'secret_key' => env('RAZORPAY_KEY_SECRET'),
+        'public_key' => env('RAZORPAY_KEY_ID'),
+    ]
 ];
