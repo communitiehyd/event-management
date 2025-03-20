@@ -7,6 +7,7 @@ use HiEvents\DomainObjects\Status\OrderPaymentStatus;
 use HiEvents\DomainObjects\Status\OrderStatus;
 use HiEvents\Repository\Interfaces\OrderRepositoryInterface;
 use HiEvents\Repository\Interfaces\RazorpayPaymentsRepositoryInterface;
+use HiEvents\Services\Domain\Ticket\TicketQuantityUpdateService;
 use Psr\Log\LoggerInterface;
 
 readonly class PaymentSucceededHandler
@@ -14,6 +15,7 @@ readonly class PaymentSucceededHandler
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
         private RazorpayPaymentsRepositoryInterface $razorpayPaymentsRepository,
+        private TicketQuantityUpdateService     $quantityUpdateService,
         private LoggerInterface $logger,
     )
     {
@@ -61,6 +63,7 @@ readonly class PaymentSucceededHandler
                 'id' => $order->getId(),
             ]
         );
+        $this->quantityUpdateService->updateQuantitiesFromOrder($order);
 
         $this->logger->info('Payment succeeded', [
             'razorpay_order_id' => $payment->order_id,
