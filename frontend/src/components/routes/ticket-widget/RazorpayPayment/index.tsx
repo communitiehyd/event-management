@@ -86,9 +86,9 @@ const RazorpayPayment = () => {
                 <LoadingMask />
             ) : (
                 <div>
-                    <h2>{t`Complete Your Payment`}</h2>
+                    <h2>Complete Your Payment</h2>
                     <button onClick={handlePayment}>
-                        {t`Pay Now`}
+                        Pay Now
                     </button>
                 </div>
             )}
