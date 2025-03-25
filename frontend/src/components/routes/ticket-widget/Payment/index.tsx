@@ -10,10 +10,16 @@ import {t} from "@lingui/macro";
 import {eventHomepagePath} from "../../../../utilites/urlHelper.ts";
 import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
 import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
+//import {RazorpayCheckoutForm} from "../RazorpayPayment";
 import {getConfig} from "../../../../utilites/config.ts";
 
 const Payment = () => {
     const {eventId, orderShortId} = useParams();
+    // const paymentMethod = 'razorpay'; // or get this from config/props
+
+    // if (paymentMethod === 'razorpay') {
+    //     return <RazorpayCheckoutForm/>;
+    // }
     const {
         data: stripeData,
         isFetched: isStripeFetched,

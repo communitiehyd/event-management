@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
+use Razorpay\Api\Api as RazorpayApi;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->bindDoctrineConnection();
         $this->bindStripeClient();
+        $this->bindRazorpay();
     }
 
     /**
@@ -79,5 +81,22 @@ class AppServiceProvider extends ServiceProvider
             StripeClient::class,
             fn() => new StripeClient(config('services.stripe.secret_key'))
         );
+    }
+
+    private function bindRazorpay(): void
+    {
+        if (!config('services.razorpay.secret_key')) {
+            logger()?->debug('Razorpay key is not set in the configuration file. Payment processing will not work.');
+            return;
+        }
+
+        $this->app->bind(
+            RazorpayApi::class,
+            fn() => new RazorpayApi(
+                config('services.razorpay.public_key'),
+                config('services.razorpay.secret_key')
+            )
+        );
+
     }
 }

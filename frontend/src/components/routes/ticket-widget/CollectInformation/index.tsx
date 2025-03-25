@@ -186,6 +186,9 @@ export const CollectInformation = () => {
         }
     }, [isEventFetched, isOrderFetched, isQuestionsFetched]);
 
+
+    console.log("VALUES", isEventFetched, isOrderFetched, isQuestionsFetched, isOrderError, isEventError)
+
     if (!isEventFetched || !isOrderFetched) {
         return <LoadingSkeleton/>
     }
@@ -231,6 +234,7 @@ export const CollectInformation = () => {
     }
 
     if (isOrderError || isEventError || isQuestionsError) {
+        console.log("Order Error", order);
         return (
             <>
                 <HomepageInfoMessage
