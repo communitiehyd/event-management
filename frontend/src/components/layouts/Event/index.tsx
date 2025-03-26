@@ -117,7 +117,7 @@ const EventLayout = () => {
                 </div>
                 <div className={classes.logo}>
                     <NavLink to={'/manage/events'}>
-                        <img src={'/logo-text-only-white-text.png'} alt={''}/>
+                        <img src={'/Communitie.png'} alt={''}/>
                     </NavLink>
                 </div>
                 <div className={classes.breadcrumbs}>
@@ -175,7 +175,7 @@ const EventLayout = () => {
                 <div className={classes.logo}>
                     <NavLink to={'/manage/events'}>
                         <img style={{maxWidth: '170px', margin: "20px auto"}}
-                             src={'/logo.svg'} alt={''}/>
+                             src={'/Communitie.svg'} alt={''}/>
                     </NavLink>
                 </div>
                 <div className={classes.nav}>
