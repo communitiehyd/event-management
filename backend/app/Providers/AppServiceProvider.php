@@ -22,7 +22,6 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->bindDoctrineConnection();
-        $this->bindStripeClient();
         $this->bindRazorpay();
     }
 
@@ -67,19 +66,6 @@ class AppServiceProvider extends ServiceProvider
 
                 return DriverManager::getConnection($connectionParams, $config)->createSchemaManager();
             }
-        );
-    }
-
-    private function bindStripeClient(): void
-    {
-        if (!config('services.stripe.secret_key')) {
-            logger()?->debug('Stripe secret key is not set in the configuration file. Payment processing will not work.');
-            return;
-        }
-
-        $this->app->bind(
-            StripeClient::class,
-            fn() => new StripeClient(config('services.stripe.secret_key'))
         );
     }
 
