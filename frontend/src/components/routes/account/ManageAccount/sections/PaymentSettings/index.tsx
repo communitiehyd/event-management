@@ -87,141 +87,51 @@ const FeePlanDisplay = ({configuration}: FeePlanDisplayProps) => {
 const ConnectStatus = ({account}: { account: Account }) => {
     const [fetchStripeDetails, setFetchStripeDetails] = useState(false);
     const [isReturningFromStripe, setIsReturningFromStripe] = useState(false);
-    const stripeDetailsQuery = useCreateOrGetStripeConnectDetails(
-        account.id,
-        !!account?.stripe_account_id || fetchStripeDetails
-    );
-
-    const stripeDetails = stripeDetailsQuery.data;
-    const error = stripeDetailsQuery.error as any;
 
     useEffect(() => {
-        if (typeof window === 'undefined') {
-            return;
-        }
-        setIsReturningFromStripe(
-            window.location.search.includes('is_return') || window.location.search.includes('is_refresh')
-        );
+        // if (typeof window === 'undefined') {
+        //     return;
+        // }
+        // setIsReturningFromStripe(
+        //     window.location.search.includes('is_return') || window.location.search.includes('is_refresh')
+        // );
     }, []);
-
-    useEffect(() => {
-        if (fetchStripeDetails && !stripeDetailsQuery.isLoading) {
-            setFetchStripeDetails(false);
-            showSuccess(t`Redirecting to Stripe...`);
-            window.location.href = String(stripeDetails?.connect_url);
-        }
-
-    }, [fetchStripeDetails, stripeDetailsQuery.isFetched]);
-
-    if (error?.response?.status === 403) {
-        return (
-            <>
-                <Card className={classes.tabContent}>
-                    <div className={paymentClasses.stripeInfo}>
-                        <Group gap="xs" mb="md">
-                            <ThemeIcon size="lg" radius="md" variant="light">
-                                <IconAlertCircle size={20}/>
-                            </ThemeIcon>
-                            <Title order={2}>{t`Access Denied`}</Title>
-                        </Group>
-                        <Text size="md">
-                            {error?.response?.data?.message}
-                        </Text>
-                    </div>
-                </Card>
-            </>
-        );
-    }
 
     return (
         <div className={paymentClasses.stripeInfo}>
-            <Title mb={10} order={3}>{t`Payment Processing`}</Title>
-
-            {stripeDetails?.is_connect_setup_complete ? (
+            {/* {props.stripeDetails?.is_connect_setup_complete && (
                 <>
-                    <Group gap="xs" mb="md">
-                        <ThemeIcon size="sm" variant="light" radius="xl" color="green">
-                            <IconCheck size={16}/>
-                        </ThemeIcon>
-                        <Text size="sm" fw={500}>
-                            <b>
-                                {t`Connected to Stripe`}
-                            </b>
-                        </Text>
-                    </Group>
-                    <Text size="sm" c="dimmed" mb="lg">
-                        {t`Your Stripe account is connected and ready to process payments.`}
-                    </Text>
-                    <Group gap="xs">
-                        <Anchor
-                            href="https://dashboard.stripe.com/"
-                            target="_blank"
-                            size="sm"
-                        >
-                            <Group gap="xs" wrap={'nowrap'}>
-                                <Text span>{t`Go to Stripe Dashboard`}</Text>
-                                <IconExternalLink size={14}/>
-                            </Group>
-                        </Anchor>
-                        <Text span c="dimmed">•</Text>
-                        <Anchor
-                            href="https://stripe.com/docs/connect"
-                            target="_blank"
-                            size="sm"
-                        >
-                            <Group gap="xs">
-                                <Text span>{t`Connect Documentation`}</Text>
-                                <IconExternalLink size={14}/>
-                            </Group>
-                        </Anchor>
-                    </Group>
+                    <h2>{t`You have connected your Stripe account`}</h2>
+                    <p>
+                        {t`You can now start receiving payments through Stripe.`}
+                    </p>
                 </>
-            ) : (
+            )} */}
+            { 
+            // !props.stripeDetails?.is_connect_setup_complete
+             // &&
+               (
                 <>
-                    <Text size="sm" c="dimmed" mb="lg">
-                        {t`To receive credit card payments, you need to connect your Stripe account. Stripe is our payment processing partner that ensures secure transactions and timely payouts.`}
-                    </Text>
-                    <Group gap="md">
-                        <Button
-                            variant="light"
-                            size="sm"
-                            leftSection={<IconBrandStripe size={20}/>}
-                            onClick={() => {
-                                if (!stripeDetails) {
-                                    setFetchStripeDetails(true);
-                                    return;
-                                } else {
-                                    if (typeof window !== 'undefined') {
-                                        showSuccess(t`Redirecting to Stripe...`);
-                                        window.location.href = String(stripeDetails?.connect_url)
-                                    }
-                                }
-                            }}
-                        >
-                            {(!isReturningFromStripe && !account?.stripe_account_id) && t`Connect with Stripe`}
-                            {(isReturningFromStripe || account?.stripe_account_id) && t`Complete Stripe Setup`}
-                        </Button>
-                        <Group gap="xs">
-                            <Anchor
-                                href="https://stripe.com/connect"
-                                target="_blank"
-                                size="sm"
+                    <h2>
+                        {!isReturningFromStripe && t`You have not connected your Stripe account`}
+                        {isReturningFromStripe && t`You have not completed your Stripe Connect setup`}
+                    </h2>
+                    <p>
+                        {t`We use Stripe to process payments. Connect your Stripe account to start receiving payments.`}
+                    </p>
+                    <p>
+                        <Group gap={20}>
+                            <Button variant={'light'}
+                                    onClick={() => {
+                                        if (typeof window !== 'undefined')
+                                            window.location.href = String(props.stripeDetails?.connect_url);
+                                    }}
                             >
-                                <Group gap="xs">
-                                    <Text span>{t`About Stripe Connect`}</Text>
-                                    <IconExternalLink size={14}/>
-                                </Group>
-                            </Anchor>
-                            <Text span c="dimmed">•</Text>
-                            <Anchor
-                                href="https://stripe.com/docs/connect"
-                                target="_blank"
-                                size="sm"
-                            >
-                                <Group gap="xs">
-                                    <Text span>{t`Documentation`}</Text>
-                                    <IconExternalLink size={14}/>
-                                </Group>
+                                {(!isReturningFromStripe) && t`Connect Stripe`}
+                                {(isReturningFromStripe) && t`Continue Stripe Connect Setup`}
+                            </Button>
+                            <Anchor target={'_blank'} href={'https://stripe.com/'}>
+                                {t`Learn more about Stripe`}
                             </Anchor>
                         </Group>
                     </Group>
@@ -233,6 +143,29 @@ const ConnectStatus = ({account}: { account: Account }) => {
 
 const PaymentSettings = () => {
     const accountQuery = useGetAccount();
+    const stripeDetailsQuery = useCreateOrGetStripeConnectDetails(accountQuery.data?.id);
+    const stripeDetails =   {   account: "",
+        stripe_account_id: "",
+        is_connect_setup_complete: false,
+        connect_url: ""};
+    //stripeDetailsQuery.data;
+    const error = stripeDetailsQuery.error as any;
+
+
+    // if (error?.response?.status === 403) {
+    //     return (
+    //         <>
+    //             <Card className={classes.tabContent}>
+    //                 <div className={paymentClasses.stripeInfo}>
+    //                     <h2>{t`You do not have permission to access this page`}</h2>
+    //                     <p>
+    //                         {error?.response?.data?.message}
+    //                     </p>
+    //                 </div>
+    //             </Card>
+    //         </>
+    //     );
+    // }
 
     return (
         <>
@@ -242,20 +175,10 @@ const PaymentSettings = () => {
             />
             <Card className={classes.tabContent}>
                 <LoadingMask/>
-                {(accountQuery.data?.configuration) && (
-                    <Grid gutter="xl">
-                        <Grid.Col span={{base: 12, md: 6}}>
-                            {accountQuery.isFetched && (
-                                <ConnectStatus account={accountQuery.data}/>
-                            )}
-                        </Grid.Col>
-                        <Grid.Col span={{base: 12, md: 6}}>
-                            {accountQuery.data?.configuration && (
-                                <FeePlanDisplay configuration={accountQuery.data.configuration}/>
-                            )}
-                        </Grid.Col>
-                    </Grid>
-                )}
+                {
+                //stripeDetails &&
+                 <ConnectStatus stripeDetails={stripeDetails}/>
+                 }
             </Card>
         </>
     );

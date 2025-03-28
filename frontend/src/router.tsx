@@ -402,7 +402,7 @@ export const router: RouteObject[] = [
             {
                 path: ":orderShortId/payment",
                 async lazy() {
-                    const Payment = await import("./components/routes/product-widget/Payment");
+                    const Payment = await import("./components/routes/ticket-widget/RazorpayPayment");
                     return {Component: Payment.default};
                 }
             },

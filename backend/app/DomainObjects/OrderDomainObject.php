@@ -22,6 +22,8 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
 
     public ?StripePaymentDomainObject $stripePayment = null;
 
+    public ?RazorpayPaymentDomainObject $razorpayPayment = null;
+
     /** @var Collection<QuestionAndAnswerViewDomainObject>|null */
     public ?Collection $questionAndAnswerViews = null;
 
@@ -178,6 +180,12 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
         return $this;
     }
 
+    public function setRazorpayPayment(?RazorpayPaymentDomainObject $razorpayPayment): OrderDomainObject
+    {
+        $this->razorpayPayment = $razorpayPayment;
+        return $this;
+    }
+
     public function isPartiallyRefunded(): bool
     {
         return $this->getTotalRefunded() > 0 && $this->getTotalRefunded() < $this->getTotalGross();
@@ -216,6 +224,11 @@ class OrderDomainObject extends Generated\OrderDomainObjectAbstract implements I
     public function getStripePayment(): ?StripePaymentDomainObject
     {
         return $this->stripePayment;
+    }
+
+    public function getRazorpayPayment(): ?RazorpayPaymentDomainObject
+    {
+        return $this->razorpayPayment;
     }
 
     public function isFreeOrder(): bool

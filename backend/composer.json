@@ -23,6 +23,7 @@
         "nette/php-generator": "^4.0",
         "php-open-source-saver/jwt-auth": "^2.1",
         "sentry/sentry-laravel": "^4.13",
+        "razorpay/razorpay": "^2.9",
         "spatie/icalendar-generator": "^2.8",
         "spatie/laravel-data": "^4.11",
         "spatie/laravel-webhook-server": "^3.8",

@@ -20,6 +20,8 @@ export const useGetOrderPublic = (
 ) => {
     const sessionIdentifier = useMemo(getSessionIdentifierFromUrl, []);
 
+export const useGetOrderPublic = (eventId: IdParam, orderShortId: IdParam, includes: string[] = []) => {
+    console.log('Query Params:', { eventId, orderShortId, includes });
     return useQuery<Order>({
         queryKey: [
             GET_ORDER_PUBLIC_QUERY_KEY,
@@ -28,12 +30,13 @@ export const useGetOrderPublic = (
             sessionIdentifier,
         ],
         queryFn: async () => {
-            const {data} = await orderClientPublic.findByShortId(
+            const {data} = await orderClientPublic.findBySessionShortId(
                 Number(eventId),
                 String(orderShortId),
                 includes,
                 sessionIdentifier ?? undefined
             );
+            console.log('Query Response:', data);
             return data;
         },
         refetchOnWindowFocus: false,

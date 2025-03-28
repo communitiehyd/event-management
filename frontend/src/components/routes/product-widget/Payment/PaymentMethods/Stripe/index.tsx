@@ -2,24 +2,26 @@ import {useParams} from "react-router";
 import {useCreateStripePaymentIntent} from "../../../../../../queries/useCreateStripePaymentIntent.ts";
 import {useEffect, useState} from "react";
 import {loadStripe, Stripe} from "@stripe/stripe-js";
-import {useGetEventPublic} from "../../../../../../queries/useGetEventPublic.ts";
-import {getConfig} from "../../../../../../utilites/config.ts";
-import {CheckoutContent} from "../../../../../layouts/Checkout/CheckoutContent";
-import {HomepageInfoMessage} from "../../../../../common/HomepageInfoMessage";
-import {t} from "@lingui/macro";
-import {eventHomepagePath} from "../../../../../../utilites/urlHelper.ts";
-import {LoadingMask} from "../../../../../common/LoadingMask";
 import {Elements} from "@stripe/react-stripe-js";
-import StripeCheckoutForm from "../../../../../forms/StripeCheckoutForm";
-import {Event} from "../../../../../../types.ts";
+import StripeCheckoutForm from "../../../forms/StripeCheckoutForm";
+import {useCreateStripePaymentIntent} from "../../../../queries/useCreateStripePaymentIntent.ts";
+import {useEffect, useState} from "react";
+import {LoadingMask} from "../../../common/LoadingMask";
+import {CheckoutContent} from "../../../layouts/Checkout/CheckoutContent";
+import {t} from "@lingui/macro";
+import {eventHomepagePath} from "../../../../utilites/urlHelper.ts";
+import {useGetEventPublic} from "../../../../queries/useGetEventPublic.ts";
+import {HomepageInfoMessage} from "../../../common/HomepageInfoMessage";
+//import {RazorpayCheckoutForm} from "../RazorpayPayment";
+import {getConfig} from "../../../../utilites/config.ts";
 
-interface StripePaymentMethodProps {
-    enabled: boolean;
-    setSubmitHandler: (submitHandler: () => () => Promise<void>) => void;
-}
-
-export const StripePaymentMethod = ({enabled, setSubmitHandler}: StripePaymentMethodProps) => {
+const Payment = () => {
     const {eventId, orderShortId} = useParams();
+    // const paymentMethod = 'razorpay'; // or get this from config/props
+
+    // if (paymentMethod === 'razorpay') {
+    //     return <RazorpayCheckoutForm/>;
+    // }
     const {
         data: stripeData,
         isFetched: isStripeFetched,

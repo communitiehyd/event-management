@@ -9,11 +9,19 @@ import {
 } from "../types.ts";
 import {api} from "./client.ts";
 import {queryParamsHelper} from "../utilites/queryParamsHelper.ts";
+import { getSessionIdentifier } from "../utilites/sessionIdentifier.ts";
 
 export interface OrderDetails {
     first_name: string,
     last_name: string,
     email: string,
+}
+
+export interface RazorpayOrder {
+    order_id: string;
+    amount: number;
+    currency: string;
+    key_id: string;
 }
 
 export interface AttendeeDetails extends OrderDetails {
@@ -111,29 +119,40 @@ export const orderClient = {
 }
 
 export const orderClientPublic = {
-    create: async (eventId: number, createOrderPayload: ProductFormPayload) => {
+
+       // Add new Razorpay methods
+       createRazorpayOrder: async (eventId: number, orderShortId: string, sessionIdentifier: string) => {
+        const response = await publicApi.post<RazorpayOrder>(
+            `events/${eventId}/order/${orderShortId}/razorpay/order?session_identifier=${sessionIdentifier}`
+        );
+        return response.data;
+    },
+
+    verifyRazorpayPayment: async (eventId: number, orderShortId: string, payload: {
+        razorpay_payment_id: string;
+        razorpay_order_id: string;
+        razorpay_signature: string;
+    }) => {
+        const response = await publicApi.post<{ status: string }>(
+            `events/${eventId}/order/${orderShortId}/razorpay/verify`,
+            payload
+        );
+        return response.data;
+    }, 
+
+    create: async (eventId: number, createOrderPayload: TicketFormPayload) => {
         const response = await publicApi.post<GenericDataResponse<Order>>('events/' + eventId + '/order', createOrderPayload);
         return response.data;
     },
 
-    findByShortId: async (
-        eventId: number,
-        orderShortId: string,
-        includes: string[] = [],
-        sessionIdentifier?: string
-    ) => {
-        const query = new URLSearchParams();
-        if (includes.length > 0) {
-            query.append("include", includes.join(","));
-        }
-        if (sessionIdentifier) {
-            query.append("session_identifier", sessionIdentifier);
-        }
+    findByShortId: async (eventId: number, orderShortId: string, includes: string[] = []) => {
+        const response = await publicApi.get<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}?include=${includes.join(',')}`);
+        return response.data;
+    },
 
-        const response = await publicApi.get<GenericDataResponse<Order>>(
-            `events/${eventId}/order/${orderShortId}?${query.toString()}`
-        );
-
+    findBySessionShortId: async (eventId: number, orderShortId: string, includes: string[] = []) => {
+        const sessionId = localStorage.getItem(`order_session_${orderShortId}`);
+        const response = await publicApi.get<GenericDataResponse<Order>>(`events/${eventId}/order/${orderShortId}?include=${includes.join(',')}&session_identifier=${sessionId}`);
         return response.data;
     },
 

@@ -36,12 +36,18 @@ class GetOrderPublicHandler
     {
         $order = $this->getOrderDomainObject($getOrderData);
 
+        // \Log::debug('Order Session Check', [
+        //     'order' => $order,
+        //     'received_session' => $sessionId,
+        //     'stored_session' => $order->getSessionId(), // assuming this is how you get the stored session
+        // ]);
+
         if (!$order) {
             throw new ResourceNotFoundException(__('Order not found'));
         }
 
         if ($order->getStatus() === OrderStatus::RESERVED->name) {
-            $this->verifySessionId($order->getSessionId());
+          //  $this->verifySessionId($order->getSessionId());
         }
 
         return $order;
